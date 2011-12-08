@@ -33,17 +33,22 @@ end
 EOF
 end
 
+lib("bushido/bushido_mail_routes.rb") do
+<<EOF
+# Mail routes
+::Bushido::Mailroute.map do |m|
+
+  m.route("mail.simple") do
+    m.subject("hello")
+  end
+
+end
+EOF
+end
+
 lib("bushido/hooks/email_hooks.rb") do
 <<EOF
 class BushidoEmailHooks < Bushido::EventObserver
-  def mail_new_comment
-  end
-
-  def mail_reply_comment
-  end
-
-  def mail_new_post
-  end
 
   def mail_simple
     puts "YAY!"
@@ -62,7 +67,7 @@ EOF
 end
 
 create_file("config/initializers/bushido_mail_routes.rb") do
-  puts <<EOF
+<<EOF
 require './lib/bushido/bushido_mail_routes.rb'
 EOF
 end
