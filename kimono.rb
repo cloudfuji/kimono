@@ -145,30 +145,8 @@ end
   EOF
   end
 
-  # lib/bushido/hooks/email_hooks.rb
-  lib("bushido/hooks/email_hooks.rb") do
-  <<-EOF
-class BushidoEmailHooks < Bushido::EventObserver
-
-  def mail_simple
-    puts "YAY!"
-    puts params.inspect
-  end
-
-  private
-end
-  EOF
-  end
-
 end
 
-
-# config/initializers/bushido_hooks.rb
-initializer "bushido_hooks.rb" do
-<<-EOF
-Dir["\#{Dir.pwd}/lib/bushido/**/*.rb"].each { |file| require file }
-EOF
-end
 
 # config/routes.rb
 prepend_to_file("config/routes.rb") do
