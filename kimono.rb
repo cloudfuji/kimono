@@ -179,6 +179,8 @@ end
 EOF
 end
 
+generate("bushido:mail_routes")
+
 # >----------------------------------[ Tane ]----------------------------------<
 
 @current_recipe = "tane"
