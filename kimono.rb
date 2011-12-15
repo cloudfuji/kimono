@@ -142,22 +142,6 @@ end
 EOF
 end
 
-
-# lib/bushido/bushido_mail_routes.rb
-lib("bushido/mail_routes.rb") do
-<<-EOF
-# Mail routes
-::Bushido::Mailroute.map do |m|
-
-  m.route("mail.simple") do
-    m.subject("hello")
-  end
-
-end
-EOF
-end
-
-
 # lib/bushido/hooks/email_hooks.rb
 lib("bushido/hooks/email_hooks.rb") do
 <<-EOF
@@ -180,15 +164,6 @@ initializer "bushido_hooks.rb" do
 Dir["\#{Dir.pwd}/lib/bushido/**/*.rb"].each { |file| require file }
 EOF
 end
-
-
-# config/initializers/bushido_mail_routes.rb
-initializer "bushido_mail_routes.rb" do
-<<-EOF
-require './lib/bushido/mail_routes.rb'
-EOF
-end
-
 
 # config/routes.rb
 prepend_to_file("config/routes.rb") do
