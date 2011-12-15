@@ -62,7 +62,7 @@ say_recipe "Devise"
 @configs[@current_recipe] = config
 
 gem "devise"
-gem "devise_bushido_authenticatable", :git =>"https://github.com/Bushido/devise_cas_authenticatable.git"#, :branch => "nbudin_updates"
+gem "devise_bushido_authenticatable", :git =>"https://github.com/Bushido/devise_cas_authenticatable.git"
 
 after_bundler do
   generate("devise:install")
