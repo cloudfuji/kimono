@@ -112,9 +112,12 @@ say_recipe "Bushido"
 
 gem "bushido", :git=>"https://github.com/Bushido/bushidogem.git"
 
-# lib/bushido/hooks/user_hooks.rb
-lib("bushido/hooks/user_hooks.rb") do
-<<-EOF
+after_bundler do 
+  generate("bushido:mail_routes")
+
+  # lib/bushido/hooks/user_hooks.rb
+  lib("bushido/hooks/user_hooks.rb") do
+  <<-EOF
 class BushidoUserHooks < Bushido::EventObserver
   def user_added
     user.create(:email  => params['data']['email'],
@@ -126,25 +129,25 @@ class BushidoUserHooks < Bushido::EventObserver
     User.find_by_ido_id(params['data']['ido_id']).try(:disable!)
   end
 end
-EOF
-end
+  EOF
+  end
 
 
-# lib/bushido/hooks/app_hooks.rb
-lib('bushido/hooks/app_hooks.rb') do
-<<-EOF
+  # lib/bushido/hooks/app_hooks.rb
+  lib('bushido/hooks/app_hooks.rb') do
+  <<-EOF
 class BushidoAppHooks < Bushido::EventObserver
   def app_claimed
     User.find(1).update_attributes(:email  => params['data']['email'],
       :ido_id => params['data']['ido_id'])
   end
 end
-EOF
-end
+  EOF
+  end
 
-# lib/bushido/hooks/email_hooks.rb
-lib("bushido/hooks/email_hooks.rb") do
-<<-EOF
+  # lib/bushido/hooks/email_hooks.rb
+  lib("bushido/hooks/email_hooks.rb") do
+  <<-EOF
 class BushidoEmailHooks < Bushido::EventObserver
 
   def mail_simple
@@ -154,7 +157,9 @@ class BushidoEmailHooks < Bushido::EventObserver
 
   private
 end
-EOF
+  EOF
+  end
+
 end
 
 
@@ -178,8 +183,6 @@ rescue => e
 end
 EOF
 end
-
-generate("bushido:mail_routes")
 
 # >----------------------------------[ Tane ]----------------------------------<
 
