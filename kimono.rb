@@ -144,7 +144,7 @@ end
 
 
 # lib/bushido/bushido_mail_routes.rb
-lib("bushido/bushido_mail_routes.rb") do
+lib("bushido/mail_routes.rb") do
 <<-EOF
 # Mail routes
 ::Bushido::Mailroute.map do |m|
@@ -175,7 +175,7 @@ end
 
 
 # config/initializers/bushido_hooks.rb
-create_file("config/initializers/bushido_hooks.rb") do
+initializer "bushido_hooks.rb" do
 <<-EOF
 Dir["\#{Dir.pwd}/lib/bushido/**/*.rb"].each { |file| require file }
 EOF
@@ -183,9 +183,9 @@ end
 
 
 # config/initializers/bushido_mail_routes.rb
-create_file("config/initializers/bushido_mail_routes.rb") do
+initializer "bushido_mail_routes.rb" do
 <<-EOF
-require './lib/bushido/bushido_mail_routes.rb'
+require './lib/bushido/mail_routes.rb'
 EOF
 end
 
