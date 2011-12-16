@@ -89,6 +89,7 @@ after_bundler do
       self.first_name = extra_attributes["first_name"].to_s
       self.last_name  = extra_attributes["last_name"].to_s
       self.email      = extra_attributes["email"]
+      self.locale     = extra_attributes["locale"]
     end
   EOF
   end
@@ -114,8 +115,7 @@ gem "bushido", :git=>"https://github.com/Bushido/bushidogem.git"
 
 after_bundler do 
   generate("bushido:mail_routes")
-  generate("bushido:app_hooks")
-  generate("bushido:user_hooks")
+  generate("bushido:hooks")
   generate("bushido:routes")
 end
 
