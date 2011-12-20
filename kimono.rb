@@ -77,7 +77,11 @@ after_bundler do
     gsub_file file, "t.rememberable", "t.string :first_name"
     gsub_file file, "t.trackable",    "t.string :last_name"
 
+    gsub_file file, "t.string :encrypted_password, :null => false, :default => \"\"", "t.string :first_name"
+    gsub_file file, "t.datetime :reset_password_sent_at", "t.string :last_name"
+
     # Replace add_index for reset_password_token with ido_id
+    # In a devise2.0 migration this also replaces the field to be created
     gsub_file file, "reset_password_token", "ido_id"
   end
   
