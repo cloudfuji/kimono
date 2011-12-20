@@ -76,11 +76,12 @@ after_bundler do
     gsub_file file, "t.recoverable",  "t.string :email"
     gsub_file file, "t.rememberable", "t.string :first_name"
     gsub_file file, "t.trackable",    "t.string :last_name"
-    inject_into_file file, "t.string :locale\n", :after => "t.string :last_name\n"
-    inject_into_file file, "t.string :timezone\n", :after => "t.string :locale\n"
 
     gsub_file file, "t.string :encrypted_password, :null => false, :default => \"\"", "t.string :first_name"
     gsub_file file, "t.datetime :reset_password_sent_at", "t.string :last_name"
+
+    inject_into_file file, "t.string :locale\n", :after => "t.string :last_name\n"
+    inject_into_file file, "t.string :timezone\n", :after => "t.string :locale\n"
 
     # Replace add_index for reset_password_token with ido_id
     # In a devise2.0 migration this also replaces the field to be created
