@@ -1,3 +1,24 @@
+    # Takes a list of ENV vars, records their value,
+    # sets them to null, runs the block, then ensures
+    # the ENV vars are restored at the end.
+    def suppress_env_vars(*vars, &block)
+      cache = {}
+      vars.each do |var|
+        cache[var] = ENV[var]
+      end
+
+      begin      
+        vars.each do |var|
+          ENV[var] = nil
+        end
+        yield block
+      ensure
+        cache.each_pair do |key, value|
+          ENV[key] = value
+        end
+      end
+    end
+
 # >----------------------------[ Initial Setup ]------------------------------<
 
 initializer 'generators.rb', <<-RUBY
@@ -147,9 +168,14 @@ gem "awesome_print",      :group => "development"
 @current_recipe = nil
 
 say_wizard "Running Bundler install. This will take a while."
-run 'bundle install'
+say_wizard "Running from : #{Dir.pwd}"
+suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+      run 'bundle install'
+end
 say_wizard "Running after Bundler callbacks."
-@after_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
+suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+      @after_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
+end
 
 @current_recipe = nil
 say_wizard "Running after everything callbacks."
