@@ -116,7 +116,16 @@ say_recipe "Bushido"
 
 gem "bushido", :git=>"https://github.com/Bushido/bushidogem.git"
 
-after_bundler do 
+after_bundler do
+  initializer "bushi_bar.rb" do
+  <<-EOF
+# These are the paths to render the Bushido bar on, which allows users to navigate to their various Bushido apps, to update their account, and to invite others from within your app
+# You may include multiple paths, each should be a regex to match against the incoming url
+# This defaults to showing the bar on all paths
+Bushido::Bar.set_bar_display_paths(/.*/)
+  EOF
+  end
+
   generate("bushido:mail_routes")
   generate("bushido:hooks")
   generate("bushido:routes")
