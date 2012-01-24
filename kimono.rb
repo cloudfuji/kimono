@@ -143,6 +143,7 @@ after_bundler do
   generate("bushido:routes")
 end
 
+run "rm ./public/index.html"
 get 'https://raw.github.com/Bushido/kimono/master/index.html', "public/index.html"
 
 # >----------------------------------[ Tane ]----------------------------------<
