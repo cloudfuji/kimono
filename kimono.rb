@@ -124,6 +124,11 @@ after_bundler do
   gsub_file user_model_file,
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
             "attr_accessible :email, :ido_id, :first_name, :last_name"
+
+      suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+        run 'bundle exec rake db:create db:migrate'
+      end
+
   
 end
 
@@ -182,5 +187,3 @@ end
 @current_recipe = nil
 say_wizard "Running after everything callbacks."
 @after_everything_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
-
-run ('bundle exec rake db:create db:migrate')
