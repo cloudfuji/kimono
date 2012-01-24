@@ -183,6 +183,4 @@ end
 say_wizard "Running after everything callbacks."
 @after_everything_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
 
-rake ('db:create')
-rake ('db:migrate')
-
+run ('bundle exec rake db:create db:migrate')
