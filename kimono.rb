@@ -125,9 +125,11 @@ after_bundler do
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
             "attr_accessible :email, :ido_id, :first_name, :last_name"
 
-      suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
-        run 'bundle exec rake db:create db:migrate'
-      end
+  suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+     run 'bundle exec rake db:create db:migrate'
+     run 'bundle exec tane exec rails s'
+     run 'launchy http://localhost:3000'
+  end
 
   
 end
@@ -150,6 +152,7 @@ end
 
 run "rm ./public/index.html"
 get 'https://raw.github.com/Bushido/kimono/master/index.html', "public/index.html"
+gem "launchy"
 
 # >----------------------------------[ Tane ]----------------------------------<
 
