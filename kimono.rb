@@ -123,7 +123,9 @@ after_bundler do
 
   gsub_file user_model_file,
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
-            "attr_accessible :email, :ido_id, :first_name, :last_name"  
+            "attr_accessible :email, :ido_id, :first_name, :last_name"
+
+  run("bundle exec rake db:create, db:migrate")
 end
 
 # >-------------------------------[ Bushido ]---------------------------------<
