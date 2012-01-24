@@ -148,18 +148,9 @@ end
 say_recipe "Tane"
 
 gem "tane",               :group => "development", :git => "https://github.com/Bushido/tane.git"
-gem "launchy"
 
 run "rm ./public/index.html"
 get 'https://raw.github.com/Bushido/kimono/master/index.html', "public/index.html"
-
-after_everything do
-  suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
-     run 'bundle exec rake db:create db:migrate'
-     run 'bundle exec tane exec rails s'
-     run 'launchy http://localhost:3000'
-  end
-end
 
 # >-------------------------------[ Test Tools ]-------------------------------<
 
