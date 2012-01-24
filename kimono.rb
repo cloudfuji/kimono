@@ -123,15 +123,7 @@ after_bundler do
 
   gsub_file user_model_file,
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
-            "attr_accessible :email, :ido_id, :first_name, :last_name"
-
-  suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
-     run 'bundle exec rake db:create db:migrate'
-     run 'bundle exec tane exec rails s'
-     run 'launchy http://localhost:3000'
-  end
-
-  
+            "attr_accessible :email, :ido_id, :first_name, :last_name"  
 end
 
 # >-------------------------------[ Bushido ]---------------------------------<
@@ -149,11 +141,6 @@ after_bundler do
   generate("bushido:hooks")
   generate("bushido:routes")
 end
-
-run "rm ./public/index.html"
-get 'https://raw.github.com/Bushido/kimono/master/index.html', "public/index.html"
-gem "launchy"
-
 # >----------------------------------[ Tane ]----------------------------------<
 
 @current_recipe = "tane"
@@ -161,6 +148,18 @@ gem "launchy"
 say_recipe "Tane"
 
 gem "tane",               :group => "development", :git => "https://github.com/Bushido/tane.git"
+gem "launchy"
+
+run "rm ./public/index.html"
+get 'https://raw.github.com/Bushido/kimono/master/index.html', "public/index.html"
+
+after_everything do
+  suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+     run 'bundle exec rake db:create db:migrate'
+     run 'bundle exec tane exec rails s'
+     run 'launchy http://localhost:3000'
+  end
+end
 
 # >-------------------------------[ Test Tools ]-------------------------------<
 
