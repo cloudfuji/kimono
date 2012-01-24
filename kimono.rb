@@ -125,7 +125,11 @@ after_bundler do
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
             "attr_accessible :email, :ido_id, :first_name, :last_name"
 
-  run("bundle exec rake db:create, db:migrate")
+   suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
+       run("bundle exec rake db:create, db:migrate")
+   end
+
+
 end
 
 # >-------------------------------[ Bushido ]---------------------------------<
