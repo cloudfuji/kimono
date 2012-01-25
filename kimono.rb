@@ -126,7 +126,7 @@ after_bundler do
             "attr_accessible :email, :ido_id, :first_name, :last_name"
 
    suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
-       run("bundle exec rake db:create db:migrate")
+       run("bundle exec rake db:migrate")
    end
 
 
