@@ -109,14 +109,15 @@
 
 	<div class="topic">
 	  <h2 id="users">Teams</h2>
-	  <p>Bushido uses CAS to handle all SSO interactions, (<a href="http://www.jasig.org/cas/cas1-architecture">here's a good</a>, if dry, introduction) with an extra layer on top to handle individual authorization. The details of authentication and authorization are boring (as they should be! It's basic stuff!), so we'll give a a quick high-level over-view of how Bushido Authentication+Authorization work:</p>
-	  <ul>
+	  <p>Bushido uses CAS to handle all SSO interactions, (<a href="http://www.jasig.org/cas/cas1-architecture">here's a good</a>, if dry, introduction) 
+	    You don't need to worry about the CAS implementation.. The details of authentication and authorization are boring (as they should be! It's basic stuff!), so we'll give a a quick high-level over-view of how Bushido Authentication+Authorization work:</p>
+	  <ol>
 	    <li>A user visits the app - a <a href="http://osr.gobushido.com/projects/kogo">totally-full-of-awesome web-based chat</a> with that dj feature they've always wanted</li>
 	    <li>The app transparently redirects the user to the Bushido login page. The app includes a note for where Bushido should send the user if they successfully log in.</li>
 	    <li>Bushido presents the user with the login form, and the user successfully logs in with their Bushido credentials</li>
 	    <li>Bushido checks to see if the user is allowed (authorized) to access the app, and automatically forwards them back to the app if so.</li>
-	  </ul>
-	  <p>The tedious parts for developers are around sending the user to Bushido to log in along with the correct note, and handling an authenticated user being forwarded back to the app. This is all taken care of for you by Bushido's <a href="https://github.com/Bushido/devise_cas_authenticatable">Devise Authentication Gem</a>(we only support Devise right now, let us know at <a href="&#109;&#97;&#105;&#x6C;&#116;&#111;:su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;">su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;</a> if you're looking for something else!). Just drop this into your gem file:</p>
+	  </ol>
+	  <p>The tedious parts for developers are around sending the user to Bushido to log in along with the correct note, and handling an authenticated user being forwarded back to the app. This is all taken care of for you by Bushido's <a href="https://github.com/Bushido/devise_cas_authenticatable">Devise Authentication Gem</a>(we only support Devise right now, let us know at <a href="&#109;&#97;&#105;&#x6C;&#116;&#111;:su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;">su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;</a> if you're looking for something else!). All you have to worry about is added Devises' <code>authenticate_user!</code> controllers in your app.</p>
 	</div>
 
 	<div class="topic">
