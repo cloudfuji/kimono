@@ -86,8 +86,8 @@
 	<div class="topic">
 	  <h2 id="overview">Anatomy Of Your Bushido App</h2>
 	  
-	  <p>Bushido apps are enhanced Ruby on Rails apps. In that sense if you are building a Bushido app for the first time, You are building a Ruby on Rails app for the first time.</p> 
-	  <p>We are hoping you know a bit about Ruby on Rails. If not here are some documents to help you get up to speed:</p>
+	  <p>Bushido apps are simply Ruby on Rails apps, enhanced. So if you're building a Bushido app for the first time, fear not - you'll be up and running in no time.</p> 
+	  <p>You'll need to know a bit about Ruby on Rails, but if not, here are some documents to help you get up to speed:</p>
 	  
           <ul class="links">
             <li><a href="http://guides.rubyonrails.org/" target="_blank">Rails Guides</a></li>
@@ -99,115 +99,118 @@
 	  <h3>What Bushido Offers </h3>
 	  <ul>
 	    <li>Click-to-Cloud deployment for end users of your app</li>
-	    <li>Easy to use Integrated apis for common features</li>
-	    <li>Single Sign On for all Bushido apps</li>
+	    <li>Easy-to-use Integrated API's for common features</li>
+	    <li>Single-Sign-On for all Bushido apps</li>
 	  </ul>
 
-	  <p>These few things let us create an amazingly slick experience for all end-users. And as you can see, Bushido apps aren't that far off from normal Rails apps. Really cool stuff.</p>
+	  <p>These pieces let us create an amazingly slick experience for all end-users. And as you can see, Bushido apps aren't that far off from normal Rails apps. Really cool stuff.</p>
 	</div>
 
 
 	<div class="topic">
 	  <h2 id="users">Teams</h2>
 	  <p>Bushido uses CAS to handle all SSO interactions, (<a href="http://www.jasig.org/cas/cas1-architecture">here's a good</a>, if dry, introduction) 
-	    You don't need to worry about the CAS implementation.. The details of authentication and authorization are boring (as they should be! It's basic stuff!), so we'll give a a quick high-level over-view of how Bushido Authentication+Authorization work:</p>
+	    You don't need to worry about the CAS implementation. The details of authentication and authorization are boring (as they should be! It's basic stuff!), so we'll give a a quick high-level over-view of how Bushido Authentication+Authorization work:</p>
 	  <ol>
 	    <li>A user visits the app - a <a href="http://osr.gobushido.com/projects/kogo">totally-full-of-awesome web-based chat</a> with that dj feature they've always wanted</li>
 	    <li>The app transparently redirects the user to the Bushido login page. The app includes a note for where Bushido should send the user if they successfully log in.</li>
 	    <li>Bushido presents the user with the login form, and the user successfully logs in with their Bushido credentials</li>
 	    <li>Bushido checks to see if the user is allowed (authorized) to access the app, and automatically forwards them back to the app if so.</li>
 	  </ol>
-	  <p>The tedious parts for developers are around sending the user to Bushido to log in along with the correct note, and handling an authenticated user being forwarded back to the app. This is all taken care of for you by Bushido's <a href="https://github.com/Bushido/devise_cas_authenticatable">Devise Authentication Gem</a>(we only support Devise right now, let us know at <a href="&#109;&#97;&#105;&#x6C;&#116;&#111;:su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;">su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;</a> if you're looking for something else!). All you have to worry about is added Devises' <code>authenticate_user!</code> controllers in your app.</p>
+	  <p>The tedious parts for developers are around sending the user to Bushido to log in along with the correct note, and handling an authenticated user being forwarded back to the app. This is all taken care of for you by Bushido's <a href="https://github.com/Bushido/devise_cas_authenticatable">Devise Authentication Gem</a>(we only support Devise right now, let us know at <a href="&#109;&#97;&#105;&#x6C;&#116;&#111;:su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;">su&#x70;&#112;&#x6F;&#114;&#116;&#64;&#x67;&#111;&#98;&#117;&#x73;&#x68;&#x69;d&#x6F;&#46;&#x63;&#x6F;&#109;</a> if you're looking for something else!). All you have to worry about is added Devise's <code>authenticate_user!</code> controllers in your app.</p>
 	</div>
 
 	<div class="topic">
 	  <h2 id="email">Email</h2>
-	  <p>Every Bushido app is provisioned with outgoing AND incoming email on tane creation. Tane will configure ActionMailer to use the :bushido delivery method by default will configure itself. You can write your mailers as normal and they will flow trough Bushido</p>
-	  <p>Any incoming email sent to your app's domain will automatically hit your app.the Bushido gem comintains a MailRoute feature (similar to the routing system in Rails) That lets you handle and respond to incoming emails. For more info on how to use MailRoute, <a href="https://github.com/Bushido/bushido/blob/master/doc/mail_routes.md">checkout the documentation.</a></p>
+	  <p>Every Bushido app is provisioned with outgoing AND incoming email on Tane creation. Tane will configure ActionMailer to use the :bushido delivery method by default will configure itself. Write your mailers as normal, and they'll flow trough Bushido without any special configuration.</p>
+	  <p>Any incoming email sent to your app's domain will automatically hit your app. The Bushido gem contains a MailRoute feature (similar to the routing system in Rails) that lets you handle and respond to incoming emails. For more info on how to use MailRoute, <a href="https://github.com/Bushido/bushido/blob/master/doc/mail_routes.md">checkout the documentation.</a></p>
+    <p>As a quick example, if your app is deployed to "http://authoritative-flower-109.gobushido.com", then any email sent to "@authoritative-flower-109.gobushido.com" will be passed through your MailRoute system where you can handle it however you'd like.
 	</div>
 	
 	<div class="topic">
 	  <h2 id="storage">Storage</h2>
-	  <p>Every app is provisioned with S3 or S3-like storage, and any ruby gem that uses S3 will be compatible. Use you're favorite S3 enabled plugin to start saving files immediately</p>
+	  <p>Every app is provisioned with S3 or S3-like storage, and any ruby gem that uses S3 will be compatible. Use your favorite S3-enabled plugin to start saving files immediately. All the configuration details are in the environmental variables: S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, STS_SESSION_TOKEN, S3_BUCKET
+
+</p>
 	</div>
 
 	<div class="topic">
 	  <h2 id="dns">Domains</h2>
-	  <p>Once a user has started using your cool app, they might want to set it up on their own domains. Every app that's booted will be assigned a memorable and positive name by default, like "ingenious-mountain-7173" (mountains are ingenious!) or "tranquil-fuji-9946" (Fuji is tranquil!), and this serves as the default subdomain as well. So the app "established-leaf-6661" would by default be accessible at "established-leaf-6661.bushi.do". But a user can change the subdomain either through the Bushido App dashboard, or you can provide them with a customized interface in-app to do so and simply make a single call, <code>Bushido::App.set_subdomain('whatever-subdomain-you-want')</code> (but it's probably a good idea to do a <code>Bushido::App.subdomain_available?('whatever-subdomain-you-want')</code> first!).</p>
-	  <p>You can also add full-domains this way as well (e.g. <www.housecollars.co.uk>), and if the domain is registered through Bushido, the DNS will be autoconfigured. Otherwise you can check on a domain to see if it's properly configured via <code>Bushido::DNS.subdomain_configured_correctly?('www.housecollars.co.uk')</code> and you'll either get a <code>{:success =&gt; true}</code> response, or an array of error messages that you can show to your end user (i.e. 'The CNAME for this domain does not point to <code>proxy.gobushido.com</code>').</p>
+	  <p>Once a user has started using your cool app, they might want to set it up on their own domains (in fact over 25% of the apps deployed to Bushido end up on customized domains). Every app that's booted will be assigned a memorable and positive name by default, like "ingenious-mountain-7173" (mountains <em>are</em> ingenious!) or "tranquil-fuji-9946" (Fuji is tranquil!), and this serves as the default subdomain as well. So the app "established-leaf-6661" would by default be accessible at "established-leaf-6661.gobushido.com". But a user can change the subdomain either through the Bushido App dashboard, or you can provide them with a customized interface in-app to do so and simply make a single call, <code>Bushido::App.set_subdomain('whatever-subdomain-you-want')</code> (but it's probably a good idea to do a <code>Bushido::App.subdomain_available?('whatever-subdomain-you-want')</code> first!).</p>
+	  <p>You can also add full-domains this way as well (e.g. <a href="www.housecollars.co.uk">www.housecollars.co.uk</a>), and if the domain is registered through Bushido, the DNS will be autoconfigured. Otherwise you can check on a domain to see if it's properly configured via <code>Bushido::DNS.subdomain_configured_correctly?('www.housecollars.co.uk')</code> and you'll either get a <code>{:success =&gt; true}</code> response, or an array of error messages that you can show to your end user (i.e. 'The CNAME for this domain does not point to <code>proxy.gobushido.com</code>').</p>
 	</div>
 	
 	<div class="topic">
 	  <h2 id="events">Events</h2>
 	  <p>Events are the way Bushido apps communicate with each other - it's push vs pull. Reacting to events is super simple - we'll implement the require hooks right now! Open <code>lib/bushido/hooks/app_hooks.rb</code> and paste:</p>
 	  <pre><code>class BushidoAppHooks &lt; Bushido::EventObserver
-	      def app_installedn
-	      user = User.create!(:user.email      =&gt; "#{Bushido::App.name}@#{Bushido::App.domain}"
-              :user.first_name =&gt; "#{Bushido::App.name}"
-              :user.last_name  =&gt; "#{Bushido::App.domain}")
-	      user
+	      def app_installed
+	        user = User.create!(:user.email      =&gt; "#{Bushido::App.name}@#{Bushido::App.domain}"
+                :user.first_name =&gt; "#{Bushido::App.name}"
+                :user.last_name  =&gt; "#{Bushido::App.domain}")
+	        user
 	      end
 
 	      def app_claimed
-	      User.find(1).update_attributes(:email  =&gt; params['data']['email'],
-              :ido_id =&gt; params['data']['ido_id'])
-	      end
+	        User.find(1).update_attributes(:email  =&gt; params['data']['email'],
+                :ido_id =&gt; params['data']['ido_id'])
+	        end
 	      end
 	  </code></pre>
 	  <p>We're creating a random user when the app is first installed, and then updating that user when the app is claimed - Why? <strong>Lazy registration</strong>, which, being lazy, <strong>is awesome</strong>. When the app is deployed like this, a user can anonymously launch the app with one click (no registration!) and be in your app using it in under a second. Bushido will take care to make sure that two anonymous users don't get sent to the same instance of the app, so everything stays clean. We'll also prompt them to claim the app so they can keep it, otherwise we throw the instance away in 24 hours. And when they do claim it, you can see that we update the user's details in-place (this will happen near-instantly), making for <em>another</em> super-slick experience. And as a developer you only had to put in a few lines to handle these events!</p>
 	  <p>To create an event observer, simply subclass <code>Bushido::EventObserver</code> and implement whatever events you want to react to as instance methods. When a new event comes in, Bushido will check for observers listening for a given event, and fire them off with pre-formatted data. Event data always has the same basic form: <code>{:category =&gt; 'string', :event =&gt; 'string', :data =&gt; {:hash_with =&gt; :event_standardized_schema}}</code>. The name of your instance method should be <code>def #{category}_#{event}</code>, e.g. <code>def comment_created</code>, or <code>def app_claimed</code>. The schema for each event is standardized and available in the Bushido Developer community documentation.</p>
 	  <p>The event will be fired with the information accessible via the <code>params</code> method. So <code>params['category']</code> will return the event category name, and <code>params['data']</code> will return the event-specific data in a hash. All the keys are strings.</p>
-	  <p>Now there are only three events left - create a blank file in <code>lib/bushido/hooks/user_hooks.rb</code> and paste:</p>
+	  <p>Now there are only three required events left - create a blank file in <code>lib/bushido/hooks/user_hooks.rb</code> and paste:</p>
 	  <pre><code>class BushidoUserHooks &lt; Bushido::EventObserver
-	      def user_added
-	      # User might have been added before, so we'll find_or_create them
-	      # by their permanent_id (ido_id)
-	      user = User.find_or_create_by_ido_id(params['data']['ido_id'])
+	        def user_added
+	          # User might have been added before, so we'll find_or_create them
+	          # by their permanent_id (ido_id)
+	          user = User.find_or_create_by_ido_id(params['data']['ido_id'])
+            
+	          user.update_attributes!(:email  =&gt; params['data']['email'],
+                  :active =&gt; true)
+	        end
+          
+	        def user_removed
+	          # Disable the user instead of destroying them, so all the data
+	          # associated with them stays (e.g. comments, projects, leads,
+	          # contacts, etc.)
+	          User.find_by_ido_id(params['data']['ido_id']).try(:disable!)
+	        end
 
-	      user.update_attributes!(:email  =&gt; params['data']['email'],
-              :active =&gt; true)
-	      end
-
-	      def user_removed
-	      # Disable the user instead of destroying them, so all the data
-	      # associated with them stays (e.g. comments, projects, leads,
-	      # contacts, etc.)
-	      User.find_by_ido_id(params['data']['ido_id']).try(:disable!)
-	      end
-
-	      def user_updated
-	      data = params['data']
-	      user = User.find_by_ido_id(data['ido_id'])
-
-	      if user
-	      # Re-use the CAS login method to set all the extra attributes we
-	      # care about (first_name, last_name, email, local, timezone,
-	      # etc.)
-	      user.bushido_extra_attributes(data)
-	      user.save
-	      end
-	      end
+	        def user_updated
+	          data = params['data']
+	          user = User.find_by_ido_id(data['ido_id'])
+            
+	          if user
+	            # Re-use the CAS login method to set all the extra attributes we
+	            # care about (first_name, last_name, email, local, timezone,
+	            # etc.)
+	            user.bushido_extra_attributes(data)
+	            user.save
+	          end
+	        end
 	      end
 	  </code></pre>
 	  <p>This will work perfectly for ~85% of the apps, but it allows you to customize what happens if you'd like (maybe send them a congratulatory email on how their life is about to change now that they have access to the amazingness of your app). Now whenever a user adds or removes another user to their team, or a user updates their profile information, your app will automatically get the change and handle it beautifully. Like a piece of art. Code art. </p>
 	  <p>That's it, you're fully integrated to the basic hooks. But wait, there's more! What if you want to react to some other events? What if in your chat app you want to paste a message to the main channel whenever a new user comments on your blog (also a Bushido app)? Simple: react to the event!</p>
 	  <pre><code>class BushidoBlogHooks &lt; Bushido::EventObserver
 	      def comment_created
-	      # Hypothetical method that sanitized and sends messages to a channel
-	      # from the app bot
-	      data = params['data']
-	      Channel.default.send_message("Exciting news guys - new comment!!\n#{data['author']} says: '#{data['body']}'")
+	        # Hypothetical method that sanitized and sends messages to a channel
+	        # from the app bot
+	        data = params['data']
+	        Channel.default.send_message("Exciting news guys - new comment!!\n#{data['author']} says: '#{data['body']}'")
 	      end
 	  </code></pre>
 
-	  <p>And now any blog on the Bushido platform that sends the "comment_created" event will be able to interact with your app! This can be used for site monitors ("The site is down guys!"), new user signups, etc. If you're interested in interacting with an app in a way that it doesn't currently send events for, you're encouraged to think of a generalized event schema and make it available to the community so apps can just work together. Or another example, where you're creating a developer-focused project management app, and you want any new help tickets created by support teams or end users to automatically flow through to the app:</p>
+	  <p>And now any blog on the Bushido platform that sends the "comment_created" event will be able to interact with your app! The same approach can be used for site monitors ("The site is down guys!"), new user signups, etc. If you're interested in interacting with an app in a way that it doesn't currently send events for, you're encouraged to think of a generalized event schema and make it available to the community so apps can just work together. Or another example, where you're creating a developer-focused project management app, and you want any new help tickets created by support teams or end users to automatically flow through to the app:</p>
 
 	  <pre><code>class BushidoTicketHooks &lt; Bushido::EventObserver
 	      def ticket_created
-	      data = params['data']
-	      task = Project.find_by_title(data['project_title']).tickets.find_or_create_by_title(data['title'])
-	      task.priority = 10 # User-submitted tickets create the highest-priority tickets
-	      task.save
+	        data = params['data']
+	        task = Project.find_by_title(data['project_title']).tickets.find_or_create_by_title(data['title'])
+	        task.priority = 10 # User-submitted tickets create the highest-priority tickets
+	        task.save
 	      end
 	  </code></pre>
 
@@ -226,10 +229,10 @@
 	<div class="topic">
 	  <h2 id="bushibar">The BushiBar</h2>
 
-	  <p>A neat component of Bushido is our Bushi Bar. The Bushi Bar is a friendly tool that allows users to update their profile, their team, and their other apps while in-app. You have the ability to show it only on certain paths simply by calling </p>
+	  <p>A neat component of Bushido is our Bushi Bar. The Bushi Bar is a friendly tool that allows users to update their profile, their team, and their other apps while in-app. It also gives them one-click access to submitting support requests! You have the ability to show it only on certain paths simply by calling </p>
 	  <code>Bushido::Bar.set_bar_display_paths('/admin', '/other/path/where/the/Bushido/bar/should/be/shown')</code>
 
-	  <p>It's in your best interest to show the bar on all admin screens, where a user might want to quickly update their apps, profile, or team. If it's a page that will be shown to non-users (e.g. a visitor-facing page on CMS), don't show the bar.</p>
+	  <p>Show the bar on all admin screens, where a user might want to quickly update their apps, profile, or team. If it's a page that will be shown to non-users (e.g. a visitor-facing page on CMS), don't show the bar.</p>
 	</div>
 	
 	<div class="topic">
