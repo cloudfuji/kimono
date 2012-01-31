@@ -143,76 +143,82 @@
 	<div class="topic">
 	  <h2 id="events">Events</h2>
 	  <p>Events are the way Bushido apps communicate with each other - it's push vs pull. Reacting to events is super simple - we'll implement the require hooks right now! Open <code>lib/bushido/hooks/app_hooks.rb</code> and paste:</p>
-	  <pre><code>class BushidoAppHooks &lt; Bushido::EventObserver
-	      def app_installed
-	        user = User.create!(:user.email      =&gt; "#{Bushido::App.name}@#{Bushido::App.domain}"
-                :user.first_name =&gt; "#{Bushido::App.name}"
-                :user.last_name  =&gt; "#{Bushido::App.domain}")
-	        user
-	      end
-
-	      def app_claimed
-	        User.find(1).update_attributes(:email  =&gt; params['data']['email'],
-                :ido_id =&gt; params['data']['ido_id'])
-	        end
-	      end
-	  </code></pre>
+	  <pre><code>
+class BushidoAppHooks &lt; Bushido::EventObserver
+  def app_installed
+    user = User.create!(:user.email      =&gt; "#{Bushido::App.name}@#{Bushido::App.domain}"
+          :user.first_name =&gt; "#{Bushido::App.name}"
+          :user.last_name  =&gt; "#{Bushido::App.domain}")
+    user
+  end
+  
+  def app_claimed
+    User.find(1).update_attributes(:email  =&gt; params['data']['email'],
+          :ido_id =&gt; params['data']['ido_id'])
+  end
+end
+</code></pre>
 	  <p>We're creating a random user when the app is first installed, and then updating that user when the app is claimed - Why? <strong>Lazy registration</strong>, which, being lazy, <strong>is awesome</strong>. When the app is deployed like this, a user can anonymously launch the app with one click (no registration!) and be in your app using it in under a second. Bushido will take care to make sure that two anonymous users don't get sent to the same instance of the app, so everything stays clean. We'll also prompt them to claim the app so they can keep it, otherwise we throw the instance away in 24 hours. And when they do claim it, you can see that we update the user's details in-place (this will happen near-instantly), making for <em>another</em> super-slick experience. And as a developer you only had to put in a few lines to handle these events!</p>
 	  <p>To create an event observer, simply subclass <code>Bushido::EventObserver</code> and implement whatever events you want to react to as instance methods. When a new event comes in, Bushido will check for observers listening for a given event, and fire them off with pre-formatted data. Event data always has the same basic form: <code>{:category =&gt; 'string', :event =&gt; 'string', :data =&gt; {:hash_with =&gt; :event_standardized_schema}}</code>. The name of your instance method should be <code>def #{category}_#{event}</code>, e.g. <code>def comment_created</code>, or <code>def app_claimed</code>. The schema for each event is standardized and available in the Bushido Developer community documentation.</p>
 	  <p>The event will be fired with the information accessible via the <code>params</code> method. So <code>params['category']</code> will return the event category name, and <code>params['data']</code> will return the event-specific data in a hash. All the keys are strings.</p>
 	  <p>Now there are only three required events left - create a blank file in <code>lib/bushido/hooks/user_hooks.rb</code> and paste:</p>
-	  <pre><code>class BushidoUserHooks &lt; Bushido::EventObserver
-	        def user_added
-	          # User might have been added before, so we'll find_or_create them
-	          # by their permanent_id (ido_id)
-	          user = User.find_or_create_by_ido_id(params['data']['ido_id'])
-            
-	          user.update_attributes!(:email  =&gt; params['data']['email'],
-                  :active =&gt; true)
-	        end
-          
-	        def user_removed
-	          # Disable the user instead of destroying them, so all the data
-	          # associated with them stays (e.g. comments, projects, leads,
-	          # contacts, etc.)
-	          User.find_by_ido_id(params['data']['ido_id']).try(:disable!)
-	        end
+	  <pre><code>
+class BushidoUserHooks &lt; Bushido::EventObserver
+  def user_added
+    # User might have been added before, so we'll find_or_create them
+    # by their permanent_id (ido_id)
+    user = User.find_or_create_by_ido_id(params['data']['ido_id'])
+    
+    user.update_attributes!(:email  =&gt; params['data']['email'],
+          :active =&gt; true)
+  end
+  
+  def user_removed
+    # Disable the user instead of destroying them, so all the data
+    # associated with them stays (e.g. comments, projects, leads,
+    # contacts, etc.)
+    User.find_by_ido_id(params['data']['ido_id']).try(:disable!)
+  end
 
-	        def user_updated
-	          data = params['data']
-	          user = User.find_by_ido_id(data['ido_id'])
-            
-	          if user
-	            # Re-use the CAS login method to set all the extra attributes we
-	            # care about (first_name, last_name, email, local, timezone,
-	            # etc.)
-	            user.bushido_extra_attributes(data)
-	            user.save
-	          end
-	        end
-	      end
-	  </code></pre>
+  def user_updated
+    data = params['data']
+    user = User.find_by_ido_id(data['ido_id'])
+    
+    if user
+      # Re-use the CAS login method to set all the extra attributes we
+      # care about (first_name, last_name, email, local, timezone,
+      # etc.)
+      user.bushido_extra_attributes(data)
+      user.save
+    end
+  end
+end
+</code></pre>
 	  <p>This will work perfectly for ~85% of the apps, but it allows you to customize what happens if you'd like (maybe send them a congratulatory email on how their life is about to change now that they have access to the amazingness of your app). Now whenever a user adds or removes another user to their team, or a user updates their profile information, your app will automatically get the change and handle it beautifully. Like a piece of art. Code art. </p>
 	  <p>That's it, you're fully integrated to the basic hooks. But wait, there's more! What if you want to react to some other events? What if in your chat app you want to paste a message to the main channel whenever a new user comments on your blog (also a Bushido app)? Simple: react to the event!</p>
-	  <pre><code>class BushidoBlogHooks &lt; Bushido::EventObserver
-	      def comment_created
-	        # Hypothetical method that sanitized and sends messages to a channel
-	        # from the app bot
-	        data = params['data']
-	        Channel.default.send_message("Exciting news guys - new comment!!\n#{data['author']} says: '#{data['body']}'")
-	      end
-	  </code></pre>
+	  <pre><code>
+class BushidoBlogHooks &lt; Bushido::EventObserver
+  def comment_created
+    # Hypothetical method that sanitized and sends messages to a channel
+    # from the app bot
+    data = params['data']
+    Channel.default.send_message("Exciting news guys - new comment!!\n#{data['author']} says: '#{data['body']}'")
+  end
+end
+</code></pre>
 
 	  <p>And now any blog on the Bushido platform that sends the "comment_created" event will be able to interact with your app! The same approach can be used for site monitors ("The site is down guys!"), new user signups, etc. If you're interested in interacting with an app in a way that it doesn't currently send events for, you're encouraged to think of a generalized event schema and make it available to the community so apps can just work together. Or another example, where you're creating a developer-focused project management app, and you want any new help tickets created by support teams or end users to automatically flow through to the app:</p>
 
-	  <pre><code>class BushidoTicketHooks &lt; Bushido::EventObserver
-	      def ticket_created
-	        data = params['data']
-	        task = Project.find_by_title(data['project_title']).tickets.find_or_create_by_title(data['title'])
-	        task.priority = 10 # User-submitted tickets create the highest-priority tickets
-	        task.save
-	      end
-	  </code></pre>
+<pre><code>
+class BushidoTicketHooks &lt; Bushido::EventObserver
+  def ticket_created
+    data = params['data']
+    task = Project.find_by_title(data['project_title']).tickets.find_or_create_by_title(data['title'])
+    task.priority = 10 # User-submitted tickets create the highest-priority tickets
+    task.save
+  end
+end
+</code></pre>
 
 	  <p>And now your project management app can interact with help-desk/ticketing software, regardless of what app it is.</p>
 	</div>
