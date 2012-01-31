@@ -96,9 +96,10 @@ after_bundler do
     # Replace the following lines to create fields for extra attributes
     gsub_file file, "t.recoverable",  "t.string :email"
     inject_into_file file, "t.string :first_name\n", :before => "t.timestamps\n"
-    inject_into_file file, "t.string :last_name\n",  :after => "t.string :first_name\n"
-    inject_into_file file, "t.string :locale\n",     :after => "t.string :last_name\n"
-    inject_into_file file, "t.string :timezone\n",   :after => "t.string :locale\n"
+    inject_into_file file, "      \n      ", :before => "t.timestamps\n"
+    inject_into_file file, "      t.string :last_name\n",  :after => "t.string :first_name\n"
+    inject_into_file file, "      t.string :locale\n",     :after => "t.string :last_name\n"
+    inject_into_file file, "      t.string :timezone\n",   :after => "t.string :locale\n"
 
     # Replace add_index for reset_password_token with ido_id
     gsub_file file, "reset_password_token", "ido_id"
@@ -113,7 +114,7 @@ after_bundler do
       self.last_name  = extra_attributes["last_name"].to_s
       self.email      = extra_attributes["email"]
       self.locale     = extra_attributes["locale"]
-      self.timezone     = extra_attributes["timezone"]
+      self.timezone   = extra_attributes["timezone"]
     end
   EOF
   end
