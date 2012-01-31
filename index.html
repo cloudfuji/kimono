@@ -142,6 +142,7 @@
 	
 	<div class="topic">
 	  <h2 id="events">Events</h2>
+    <h3>Handling events</h3>
 	  <p>Events are the way Bushido apps communicate with each other - it's push vs pull. Reacting to events is super simple - we'll implement the require hooks right now! Open <code>lib/bushido/hooks/app_hooks.rb</code> and paste:</p>
 	  <pre><code>
 class BushidoAppHooks &lt; Bushido::EventObserver
@@ -221,6 +222,55 @@ end
 </code></pre>
 
 	  <p>And now your project management app can interact with help-desk/ticketing software, regardless of what app it is.</p>
+
+    <h3>Publishing Events</h3>
+    Publishing events is a single call: <pre><code>Bushido::Event.publish(hash_of_event_data)</code></pre>. The basic event hash should always look like this: <pre><code>{:category => "event_category", :name => "event_name", :data => {:event_specific => :hash_schema}}</code></pre>. For example, the standard git_received hook (based off of the github event) looks like this:
+<pre>
+<code>
+payload = {
+  :before     => before,
+  :after      => after,
+  :ref        => ref,
+  :commits    => [{
+    :id        => commit.id,
+    :message   => commit.message,
+    :timestamp => commit.committed_date.xmlschema,
+    :url       => commit_url,
+    :added     => array_of_added_paths,
+    :removed   => array_of_removed_paths,
+    :modified  => array_of_modified_paths,
+    :author    => {
+      :name  => commit.author.name,
+      :email => commit.author.email
+    }
+  }],
+  :repository => {
+    :name        => repository.name,
+    :url         => repo_url,
+    :pledgie     => repository.pledgie.id,
+    :description => repository.description,
+    :homepage    => repository.homepage,
+    :watchers    => repository.watchers.size,
+    :forks       => repository.forks.size,
+    :private     => repository.private?,
+    :owner => {
+      :name  => repository.owner.login,
+      :email => repository.owner.email
+    }
+  }
+}
+
+event = {}
+event[:category] = :git
+event[:name]     = :received
+event[:data]     = payload
+
+Bushido::Event.publish(event)
+</code>
+</pre>
+Fire it, and forget about it. If any other app in the user's current group responds to this, they'll handle it on their side. As a matter of style, all fields should be able to be symbolized easily (no spaces in hash keys, etc.) and should be underscore rather than CamelCase. Bushido will ensure some degree of regularity for you, but it's cleaner to keep it well-formed on your side as well.
+
+That's it! Your app is interacting with untold other apps already! You're like a programming tornado fueled by wild snow leopards chasing after ... well, chasing after something wild snow-leopards really like. That's how powerful you and your app are. Super powerful. Yeah.
 	</div>
 
 	<div class="topic">
