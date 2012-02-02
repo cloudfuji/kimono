@@ -101,7 +101,6 @@
       </ul>
 
       <p>That about sums up the main tenets of Bushido, but if we have to condense it down into one sentence, it'd be: <br /><br /> <strong>Bushido makes building, connecting, and using applications <em>fun</em>.</strong></p>
-</p>
   </div>
 
 	<div class="topic">
@@ -131,7 +130,7 @@
 	  <h2 id="tane">Tane</h2>
     <p>What is Tane? Tane is your friend, your buddy, your faithful Bushido companion.</p>
     <p>In less flowery prose, Tane is the main tool you'll use for developing your Bushido apps locally, and then publishing them to Bushido so others can deploy your app with a single click. You'll use tane to create a blank Bushido-optimized Rails app, or when porting an existing Rails app to run smoothly on Bushido, to test incoming <a href="#events">events</a> and <a href="#email">emails</a>, and finally to publish your app to the Bushido AppStore.</p>
-    <p>Here are the main commands you'll use when getting started with Tane:
+    <div>Here are the main commands you'll use when getting started with Tane:
       <ul>
         <li>tane login: Logs in the current computer to your Bushido account</li>
         <li>tane logout: Logs the current computer our of your Bushido account</li>
@@ -146,7 +145,7 @@
         <li>tane claim: A shortcut for `tane event app claimed "{:email => (your email), :ido_id => (your <a href='#ido_id'>ido_id</a>)"'</li>
         <li>tane email: Simulates an incoming email hitting your app. The email is defined in .bushido/emails/(email_template_name).yml and is completely configurable.</li>
       </ul>
-    </p>
+    </div>
   </div>
 
 	<div class="topic">
@@ -340,11 +339,12 @@ That's it! Your app is interacting with untold other apps already! You're like a
 	  <p><a href="http://osr.gobushido.com">Open-source Rails</a> is the premier listing of high-quality open-source Rails apps, most of which are integrated with the Bushido system and can be launched with one click. We publish only the best apps here - and we'd love to show off yours!</p>
 	</div>
       </div>
-    </section>
+      
+	    <div class="footnotes">
+	      <p id="footnotes_distribution_chain"><sup>#1</sup> - Credit for this analogy goes to <a href="http://www.youtube.com/watch?v=3BhDLm9jo5Y">James Lindenbaum</a>.</p>
+      </div>
 
-	<div class="footnotes">
-	  <p id="footnotes_distribution_chain">Credit for this analogy goes to <a href="www.youtube.com/watch?v=3BhDLm9jo5Y">James Lindenbaum</a>.</p>
-  </div>
+    </section>
 </div> <!-- end of #ro0t --> 
 
 <footer id="footer"> 
