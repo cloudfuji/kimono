@@ -177,7 +177,7 @@ gem "awesome_print",      :group => "development"
 say_wizard "Running Bundler install. This will take a while."
 say_wizard "Running from : #{Dir.pwd}"
 suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
-      run 'bundle install'
+      run 'bundle install --quiet'
 end
 say_wizard "Running after Bundler callbacks."
 suppress_env_vars("BUNDLE_BIN_PATH", "BUNDLE_GEMFILE", "RUBYOPT") do
