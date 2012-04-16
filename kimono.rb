@@ -5,7 +5,7 @@ Rails.application.config.generators do |g|
 end
 RUBY
 
-@recipes = ["devise", "bushido", "tane", "test_tools"] 
+@recipes = ["devise", "cloudfuji", "tane", "test_tools"] 
 
 def recipes; @recipes end
 def recipe?(name); @recipes.include?(name) end
@@ -53,7 +53,7 @@ def after_everything(&block); @after_everything_blocks << [@current_recipe, bloc
 @before_configs = {}
 def before_config(&block); @before_configs[@current_recipe] = block; end
 
-# >----------------------[ Devise and devise_bushido_authenticatable ]----------------------<
+# >----------------------[ Devise and devise_cloudfuji_authenticatable ]----------------------<
 
 @current_recipe = "devise"
 @before_configs["devise"].call if @before_configs["devise"]
@@ -62,15 +62,15 @@ say_recipe "Devise"
 @configs[@current_recipe] = config
 
 gem "devise"
-gem "devise_bushido_authenticatable", :git =>"https://github.com/Bushido/devise_cas_authenticatable.git"
+gem "devise_cloudfuji_authenticatable"
 
 after_bundler do
   generate("devise:install")
   generate("devise", "User")
   
   Dir["db/migrate/*devise_create_*"].each do |file|
-    # Replace database_authenticatable with bushido_authenticatable in the migration
-    gsub_file file, "database_authenticatable :null => false", "bushido_authenticatable"
+    # Replace database_authenticatable with cloudfuji_authenticatable in the migration
+    gsub_file file, "database_authenticatable :null => false", "cloudfuji_authenticatable"
 
     # Replace the following lines to create fields for extra attributes
     gsub_file file, "t.recoverable",  "t.string :email"
@@ -87,7 +87,7 @@ after_bundler do
 
   inject_into_class user_model_file, "User" do
   <<-EOF
-    def bushido_extra_attributes(extra_attributes)
+    def cloudfuji_extra_attributes(extra_attributes)
       self.first_name = extra_attributes["first_name"].to_s
       self.last_name  = extra_attributes["last_name"].to_s
       self.email      = extra_attributes["email"]
@@ -98,7 +98,7 @@ after_bundler do
   end
 
   gsub_file user_model_file, ":recoverable, :rememberable, :trackable, :validatable", ""
-  gsub_file user_model_file, ":database_authenticatable, :registerable,", ":bushido_authenticatable"
+  gsub_file user_model_file, ":database_authenticatable, :registerable,", ":cloudfuji_authenticatable"
 
   gsub_file user_model_file,
             "attr_accessible :email, :password, :password_confirmation, :remember_me",
@@ -106,29 +106,29 @@ after_bundler do
   
 end
 
-# >-------------------------------[ Bushido ]---------------------------------<
+# >-------------------------------[ Cloudfuji ]---------------------------------<
 
-@current_recipe = "bushido"
-@before_configs["bushido"].call if @before_configs["bushido"]
-say_recipe "Bushido"
+@current_recipe = "cloudfuji"
+@before_configs["cloudfuji"].call if @before_configs["cloudfuji"]
+say_recipe "Cloudfuji"
 
 @configs[@current_recipe] = config
 
-gem "bushido", :git=>"https://github.com/Bushido/bushidogem.git"
+gem "cloudfuji"
 
 after_bundler do
-  initializer "bushi_bar.rb" do
+  initializer "cloudfuji_bar.rb" do
   <<-EOF
-# These are the paths to render the Bushido bar on, which allows users to navigate to their various Bushido apps, to update their account, and to invite others from within your app
+# These are the paths to render the Cloudfuji bar on, which allows users to navigate to their various Cloudfuji apps, to update their account, and to invite others from within your app
 # You may include multiple paths, each should be a regex to match against the incoming url
 # This defaults to showing the bar on all paths
-Bushido::Bar.set_bar_display_paths(/.*/)
+Cloudfuji::Bar.set_bar_display_paths(/.*/)
   EOF
   end
 
-  generate("bushido:mail_routes")
-  generate("bushido:hooks")
-  generate("bushido:routes")
+  generate("cloudfuji:mail_routes")
+  generate("cloudfuji:hooks")
+  generate("cloudfuji:routes")
 end
 
 
@@ -138,7 +138,7 @@ end
 @before_configs["tane"].call if @before_configs["tane"]
 say_recipe "Tane"
 
-gem "tane",               :group => "development", :git => "https://github.com/Bushido/tane.git"
+gem "tane"
 
 # >-------------------------------[ Test Tools ]-------------------------------<
 
